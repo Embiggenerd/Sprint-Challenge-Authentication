@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
 
     const hashedPass = hashPassword(password)
 
-    const [id] = await db('users').insert({ username, password:hashedPass })
+    const [id] = await db('users').insert({ username, password: hashedPass })
 
     const [newUser] = await db('users').select('username', 'id').where({ id })
 
@@ -25,11 +25,29 @@ router.post('/register', async (req, res) => {
   } catch (e) {
     console.log(e)
   }
-  // implement registration
 });
 
-router.post('/login', (req, res) => {
-  // implement login
+router.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body
+    if (!username || !password) {
+      return res.status(400).json({ message: "Username and Password are required!" })
+    }
+
+    const [user] = await db('users').select('*').where({ username })
+
+    const authenticated = comparePasswords(password, user.password)
+
+    const token = generateToken(user)
+
+    if(authenticated) {
+      return res.json({token})
+    }
+
+    return res.status(400).json({message: "Try again!"})
+  } catch (e) {
+    console.log(e)
+  }
 });
 
 module.exports = router;
