@@ -1,8 +1,26 @@
-/* 
-  complete the middleware code to check if the user is logged in
-  before granting access to the next middleware/route handler
-*/
+const { verify } = require('jsonwebtoken')
+const jwtSecret = process.env.JWTSECRET || 'secret'
 
 module.exports = (req, res, next) => {
-  res.status(401).json({ you: 'shall not pass!' });
-};
+  try {
+    const { authorization } = req.headers
+
+    if (authorization) {
+      verify(authorization, jwtSecret, (err, decodedToken) => {
+        if (err) {
+          res.status(401).json({ message: "Unauthorized" })
+
+        } else {
+          req.decodedToken = decodedToken;
+          next();
+        }
+      })
+
+    } else {
+      return res.status(400).json({ message: "No authorization provided" })
+    }
+
+  } catch (error) {
+    console.log(error)
+  }
+}
