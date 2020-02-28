@@ -39,12 +39,16 @@ Commit your code regularly and use descriptive messages. This helps both you (in
 Demonstrate your understanding of this week's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
 - [ ] What is the purpose of using _sessions_?
+    A session is a value in some kind of key value pair structure. A key is stored on a cookie, and the value is gotten via that key. The session can be used to store any kind of data pertinent to that particular user, with the simplest being a user id.
 
 - [ ] What does bcrypt do to help us store passwords in a secure manner.
+    Bcrypt passes the password through a one way hashing algorithm, as well as salts it in order to increase dimensions of a rainbow table used to crack the database. It also compares passwords provided by user to hashed password stored in database for login purposes.
 
 - [ ] What does bcrypt do to slow down attackers?
+    Salting forces rainbow tables to increase dimensional complexity.
 
 - [ ] What are the three parts of the JSON Web Token?
+    Payload, actual data. A signature which contains a hash of the payload + secret. A header with contains meta information like type of hashing algorithm used.
 
 ## Minimum Viable Product
 
